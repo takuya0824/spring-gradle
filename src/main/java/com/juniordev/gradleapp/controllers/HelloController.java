@@ -10,10 +10,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.juniordev.gradleapp.bean.Brand;
 import com.juniordev.gradleapp.bean.Motorcycle;
 
+import lombok.extern.slf4j.Slf4j;
+
 // @RestController
-@Controller
 // @RequestMapping("/hello")
+@Controller
+@Slf4j
 public class HelloController {
+
+  // private static final Logger log = LoggerFactory.getLogger(HelloController.class);
+
   @GetMapping("")
   public String hello() {
     return "gradle hello -version2";
@@ -34,6 +40,9 @@ public class HelloController {
 
     model.addAttribute("brands", brands);
     model.addAttribute("motos", motos);
+
+    log.debug("motos: {}", motos);
+
 
     return "list";
   }
