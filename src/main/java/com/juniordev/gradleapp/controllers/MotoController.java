@@ -7,8 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.juniordev.gradleapp.bean.Brand;
-import com.juniordev.gradleapp.bean.Motorcycle;
+import com.juniordev.gradleapp.beans.Brand;
+import com.juniordev.gradleapp.beans.Motorcycle;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 // @RequestMapping("/hello")
 @Controller
 @Slf4j
-public class HelloController {
+public class MotoController {
 
   // private static final Logger log = LoggerFactory.getLogger(HelloController.class);
 
