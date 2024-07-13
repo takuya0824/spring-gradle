@@ -1,4 +1,4 @@
-package com.juniordev.gradleapp.bean;
+package com.juniordev.gradleapp.beans;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
