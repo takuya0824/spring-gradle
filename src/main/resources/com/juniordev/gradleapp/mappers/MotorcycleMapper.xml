@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juniordev.gradleapp.mappers.MotorcycleMapper">
+  <resultMap id="motorcycleMap" type="com.juniordev.gradleapp.beans.Motorcycle" autoMapping="true">
+    <association property="brand" javaType="com.juniordev.gradleapp.beans.Brand" autoMapping="true">
+    </association>
+  </resultMap>
+  <select id="selectAll" resultMap="motorcycleMap">
+    select
+      m.moto_no 
+      , m.moto_name 
+      , m.price 
+      , m.comment 
+      , m.brand_id 
+      , b.brand_name 
+    from
+      motorcycle m
+    left join brand b on
+      m.brand_id = b.brand_id
+    order by
+      moto_no
+  </select>
+</mapper>
