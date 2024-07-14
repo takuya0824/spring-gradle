@@ -2,43 +2,187 @@ package com.juniordev.gradleapp.services;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.juniordev.gradleapp.beans.Brand;
 import com.juniordev.gradleapp.beans.Motorcycle;
+import com.juniordev.gradleapp.beans.SearchCondition;
 
 @SpringBootTest
 public class MotoServiceTest {
+
+  DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyy/MM/dd HH:mm");
   
   @Autowired
   MotoService motoService;
 
+  // @Test
+  // void バイク情報を全件検索できる() {
+  //   SearchCondition condition = new SearchCondition();
+  //   List<Motorcycle> motos = motoService.getMotos(condition);
+
+  //   assertThat(motos.size()).isEqualTo(4);
+
+  //   Motorcycle moto = motos.get(0);
+  //   assertThat(moto.getMotoNo()).isEqualTo(1);
+  //   assertThat(moto.getMotoName()).isEqualTo("GB350");
+  //   assertThat(moto.getPrice()).isEqualTo(3500000);
+  //   assertThat(moto.getComment()).isEqualTo("かっこいい");
+  //   assertThat(moto.getBrand().getBrandName()).isEqualTo("HONDA");
+  // }
+
+  // @Test
+  // void ブランド情報を全件検索できる() {
+  //   List<Brand> brands = motoService.getBrands();
+
+  //   assertThat(brands.size()).isEqualTo(4);
+
+  //   Brand brand = brands.get(0);
+  //   assertThat(brand.getBrandId()).isEqualTo(1);
+  //   assertThat(brand.getBrandName()).isEqualTo("HONDA");
+  // }
+
+  @DisplayName("バイク一覧取得 条件：ブランドID")
+  @ParameterizedTest
+  @CsvSource({"1, HONDA", "2, KAWASAKI", "3, SUZUKI", "4, NISSAN"})
+  void test001(int brandId, String brandName) {
+    SearchCondition condition = new SearchCondition();
+    condition.setBrandId(brandId);
+    List<Motorcycle> motos = motoService.getMotos(condition);
+    assertThat(motos.size()).isGreaterThanOrEqualTo(1);
+    for (Motorcycle moto : motos) {
+      assertThat(moto.getBrand().getBrandName()).isEqualTo(brandName);
+    }
+  }
+
+  @DisplayName("バイク一覧取得 条件：ブランドID 該当なし")
   @Test
-  void バイク情報を全件検索できる() {
-    List<Motorcycle> motos = motoService.getMotos();
+  void test002() {
+    SearchCondition condition = new SearchCondition();
+    condition.setBrandId(99);
+    List<Motorcycle> motos = motoService.getMotos(condition);
+    assertThat(motos.size()).isEqualTo(0);
+  }
+
+  @DisplayName("バイク一覧取得 条件：バイク名 完全一致")
+  @ParameterizedTest
+  @CsvSource({"GB350", "FG230", "SG260"})
+  void test003(String motoName) {
+    SearchCondition condition = new SearchCondition();
+    condition.setKeyword(motoName);
+    List<Motorcycle> motos = motoService.getMotos(condition);
+    assertThat(motos.size()).isGreaterThanOrEqualTo(1);
+    for (Motorcycle moto : motos) {
+      assertThat(moto.getMotoName()).isEqualTo(motoName);
+    }
+  }
+
+  @DisplayName("バイク一覧取得 条件：バイク名 部分一致")
+  @ParameterizedTest
+  @CsvSource({"GB, GB350", "230, FG230", "G26, SG260"})
+  void test004(String keyword, String motoName) {
+    SearchCondition condition = new SearchCondition();
+    condition.setKeyword(keyword);
+
+    List<Motorcycle> motos = motoService.getMotos(condition);
+    assertThat(motos.size()).isGreaterThanOrEqualTo(1);
+    for (Motorcycle moto : motos) {
+      assertThat(moto.getMotoName()).isEqualTo(motoName);
+    }
+  }
+
+  @DisplayName("バイク一覧取得 条件：バイク名 該当なし")
+  @Test
+  void test005() {
+    SearchCondition condition = new SearchCondition();
+    condition.setKeyword("存在しないバイク名");
+    List<Motorcycle> motos = motoService.getMotos(condition);
+
+    assertThat(motos.size()).isEqualTo(0);
+  }
+
+  @DisplayName("バイク一覧取得 条件：ブランドID, バイク名")
+  @ParameterizedTest
+  @CsvSource({"1, GB, GB350", "2, 230, FG230", "3, G2, SG260"})
+  void test006(int brandId, String keyword, String motoName) {
+    SearchCondition condition = new SearchCondition();
+    condition.setBrandId(brandId);
+    condition.setKeyword(keyword);
+
+    List<Motorcycle> motos = motoService.getMotos(condition);
+
+    assertThat(motos.size()).isGreaterThanOrEqualTo(1);
+    for (Motorcycle moto : motos) {
+      assertThat(moto.getMotoName()).startsWith(motoName);
+    }
+  }
+
+  @DisplayName("バイク一覧取得 条件：ブランドID, バイク名 該当なし")
+  @ParameterizedTest
+  @CsvSource({"1, GC350", "2, KG230", "3, SR260"})
+  void test007(int brandId, String keyword) {
+    SearchCondition condition = new SearchCondition();
+    condition.setBrandId(brandId);
+    condition.setKeyword(keyword);
+
+    List<Motorcycle> motos = motoService.getMotos(condition);
+
+    assertThat(motos.size()).isEqualTo(0);
+  }
+
+  @DisplayName("バイク一覧取得 条件：なし 全件該当")
+  @Test
+  void test008() {
+    SearchCondition condition = new SearchCondition();
+
+    List<Motorcycle> motos = motoService.getMotos(condition);
 
     assertThat(motos.size()).isEqualTo(4);
+  }
 
-    Motorcycle moto = motos.get(0);
+  @DisplayName("バイク情報取得 条件：バイク番号")
+  @ParameterizedTest
+  @CsvSource({"1, GB350", "2, FG230", "3, SG260"})
+  void test009(int motoNo, String motoName) {
+    Motorcycle moto = motoService.getMotos(motoNo);
+
+    assertThat(moto.getMotoName()).isEqualTo(motoName);
+  }
+
+  @DisplayName("バイク情報取得 条件：バイク番号 全項目確認")
+  @Test
+  void test010() {
+    Motorcycle moto = motoService.getMotos(1);
+
     assertThat(moto.getMotoNo()).isEqualTo(1);
     assertThat(moto.getMotoName()).isEqualTo("GB350");
     assertThat(moto.getPrice()).isEqualTo(3500000);
     assertThat(moto.getComment()).isEqualTo("かっこいい");
-    assertThat(moto.getBrand().getBrandName()).isEqualTo("HONDA");
+    assertThat(moto.getBrand().getBrandId()).isEqualTo(1);
+    assertThat(moto.getCreateDateTime().format(dtFormatter)).isEqualTo(LocalDateTime.now().format(dtFormatter));
+    assertThat(moto.getUpdateDateTime()).isNull();
   }
 
+  @DisplayName("バイク情報更新")
   @Test
-  void ブランド情報を全件検索できる() {
-    List<Brand> brands = motoService.getBrands();
+  @Transactional
+  void test011() {
+    Motorcycle before = motoService.getMotos(1);
+    before.setMotoName("newname");
 
-    assertThat(brands.size()).isEqualTo(4);
 
-    Brand brand = brands.get(0);
-    assertThat(brand.getBrandId()).isEqualTo(1);
-    assertThat(brand.getBrandName()).isEqualTo("HONDA");
+    motoService.save(before);
+
+    Motorcycle after = motoService.getMotos(1);
+    assertThat(after.getMotoName()).isEqualTo("newname");
   }
 }

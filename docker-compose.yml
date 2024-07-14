@@ -10,5 +10,6 @@ services:
       MYSQL_ROOT_USER: root
       MYSQL_PASSWORD: test
       MYSQL_USER: test
+      TZ: Asia/Tokyo
     ports:
       - 3306:3306

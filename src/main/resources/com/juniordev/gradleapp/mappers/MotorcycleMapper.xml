@@ -7,7 +7,7 @@
     <association property="brand" javaType="com.juniordev.gradleapp.beans.Brand" autoMapping="true">
     </association>
   </resultMap>
-  <select id="selectAll" resultMap="motorcycleMap">
+  <select id="selectByCondition" resultMap="motorcycleMap">
     select
       m.moto_no 
       , m.moto_name 
@@ -17,9 +17,36 @@
       , b.brand_name 
     from
       motorcycle m
-    left join brand b on
-      m.brand_id = b.brand_id
+    left join brand b
+      on m.brand_id = b.brand_id
+    <where>
+      <if test="brandId != null">
+        m.brand_id = #{brandId}
+      </if>
+      <if test="keyword != null">
+        AND m.moto_name like CONCAT('%', #{keyword}, '%')
+      </if>
+    </where>
     order by
-      moto_no
+      m.moto_no
+  </select>
+  <select id="selectByMotoNo" resultMap="motorcycleMap">
+    select
+      m.moto_no 
+      , m.moto_name 
+      , m.price 
+      , m.comment 
+      , m.brand_id 
+      , m.create_date_time 
+      , m.update_date_time 
+      , b.brand_name 
+    from
+      motorcycle m
+    left join brand b
+      on m.brand_id = b.brand_id
+    where
+      m.moto_no = #{motoNo}
+    order by
+      m.moto_no
   </select>
 </mapper>

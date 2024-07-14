@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.juniordev.gradleapp.beans.Brand;
 import com.juniordev.gradleapp.beans.Motorcycle;
+import com.juniordev.gradleapp.beans.SearchCondition;
 import com.juniordev.gradleapp.services.MotoService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,8 @@ public class MotoController {
     List<Brand> brands = motoService.getBrands();
     
     // バイク
-    List<Motorcycle> motos = motoService.getMotos();
+    SearchCondition condition = new SearchCondition();
+    List<Motorcycle> motos = motoService.getMotos(condition);
 
     model.addAttribute("brands", brands);
     model.addAttribute("motos", motos);
