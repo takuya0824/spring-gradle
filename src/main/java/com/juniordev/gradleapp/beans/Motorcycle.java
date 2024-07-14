@@ -23,5 +23,5 @@ public class Motorcycle {
   // 作成日時
   private LocalDateTime createDateTime;
   // 更新日時
-  private LocalDateTime upDateTime;
+  private LocalDateTime updateDateTime;
 }
