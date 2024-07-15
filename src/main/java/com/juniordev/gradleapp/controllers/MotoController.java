@@ -1,5 +1,6 @@
 package com.juniordev.gradleapp.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ public class MotoController {
     // バイク
     List<Motorcycle> motos = motoService.getMotos(searchForm);
     model.addAttribute("motos", motos);
+    model.addAttribute("datetime", LocalDateTime.now());
 
     log.debug("motos: {}", motos);
 
