@@ -13,7 +13,7 @@
         <a class="navbar-brand" href="#" th:text="#{page.search}"></a>
       </div>
     </nav>
-    <div class="container text-center">
+    <div class="container">
       <form th:action="@{/list}" method="get">
         <div class="row justify-content-end">
           <div class="col-2">
@@ -61,7 +61,7 @@
             <tr th:each="moto : ${motos}" th:object="${moto}">
               <th scope="row" th:text="*{motoNo}"></th>
               <td th:text="*{brand.brandName}"></td>
-              <td th:text="*{motoName}"></td>
+              <td><a th:href="@{/list/} + *{motoNo}" th:text="*{motoName}"></a></td>
               <td th:text="*{#numbers.formatInteger(price,3,'COMMA')}" class="text-end"></td>
               <td th:text="*{comment}"></td>
             </tr>

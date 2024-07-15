@@ -71,6 +71,13 @@ public class MotoController {
     return "list";
   }
 
+  @GetMapping("/list/{motoNo}")
+  public String initUpdate(Model model) {
+    this.setBrands(model);
+
+    return "moto";
+  }
+
   /**
    * ブランドリストをmodelにセットする
    * @param model model
