@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
 
 import com.juniordev.gradleapp.beans.Motorcycle;
-import com.juniordev.gradleapp.beans.SearchCondition;
+import com.juniordev.gradleapp.beans.SearchForm;
 
 @Mapper
 public interface MotorcycleMapper {
@@ -16,7 +16,7 @@ public interface MotorcycleMapper {
    * @param condition 検索条件
    * @return バイク情報リスト
    */
-  public List<Motorcycle> selectByCondition(SearchCondition condition);
+  public List<Motorcycle> selectByCondition(SearchForm condition);
   
   
   /**

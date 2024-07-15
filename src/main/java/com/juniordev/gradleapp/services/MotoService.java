@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.juniordev.gradleapp.beans.Brand;
 import com.juniordev.gradleapp.beans.Motorcycle;
-import com.juniordev.gradleapp.beans.SearchCondition;
+import com.juniordev.gradleapp.beans.SearchForm;
 import com.juniordev.gradleapp.mappers.BrandMapper;
 import com.juniordev.gradleapp.mappers.MotorcycleMapper;
 
@@ -22,7 +22,7 @@ public class MotoService {
   BrandMapper brandMapper;
   
   @Transactional
-  public List<Motorcycle> getMotos(SearchCondition condition) {
+  public List<Motorcycle> getMotos(SearchForm condition) {
     return motorcycleMapper.selectByCondition(condition);
   }
 
