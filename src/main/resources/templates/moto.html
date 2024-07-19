@@ -14,39 +14,43 @@
       </div>
     </nav>
     <div class="container">
-      <div class="row">
-        <div class="col">
-          <label for="brand" class="form-label">番号10</label>
+      <form method="post" th:object="${motoForm}" th:action="@{/list/save}">
+        <div class="row">
+          <div class="col">
+            <label for="brand" class="form-label">番号</label>
+            <span th:text="*{motoNo}"></span>
+            <input type="hidden" th:field="*{motoNo}">
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <label for="brand" class="form-label">メーカー</label>
-          <select class="form-select" id="brand" aria-label="Default select example">
-            <option value=""></option>
-            <option th:each="brand : ${brands}" th:text="brand.brandName" th:value="${brand.brandId}"></option>
-          </select>
+        <div class="row">
+          <div class="col">
+            <label for="brand" class="form-label">メーカー</label>
+            <select th:field="*{brand.brandId}" class="form-select" id="brand" aria-label="Default select example">
+              <option value=""></option>
+              <option th:each="brand : ${brands}" th:text="${brand.brandName}" th:value="${brand.brandId}"></option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="motoName" class="form-label">車名</label>
+            <input th:field="*{motoName}" type="text" class="form-control" id="motoName">
+          </div>
+          <div class="col">
+            <label for="price" class="form-label">価格</label>
+            <input th:field="*{price}" type="text" class="form-control" id="price">
+          </div>
         </div>
-        <div class="col">
-          <label for="motoName" class="form-label">車名</label>
-          <input type="text" class="form-control" id="motoName">
+        <div class="row">
+          <div class="col">
+            <label for="comment" class="form-label">コメント</label>
+            <textarea th:field="*{comment}" type="text" class="form-control" id="comment" rows="3"></textarea>
+          </div>
         </div>
-        <div class="col">
-          <label for="price" class="form-label">価格</label>
-          <input type="text" class="form-control" id="price">
+        <div class="row mt-3">
+          <div class="col text-end">
+            <button class="btn btn-primary" type="submit">保存</button>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <label for="comment" class="form-label">コメント</label>
-          <textarea type="text" class="form-control" id="comment" rows="3"></textarea>
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col text-end">
-          <button class="btn btn-primary" type="submit">保存</button>
-        </div>
-      </div>
+      </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </body>
