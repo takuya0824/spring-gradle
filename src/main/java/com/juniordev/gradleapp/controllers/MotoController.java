@@ -3,16 +3,21 @@ package com.juniordev.gradleapp.controllers;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.juniordev.gradleapp.beans.Brand;
 import com.juniordev.gradleapp.beans.Motorcycle;
 import com.juniordev.gradleapp.beans.SearchForm;
+import com.juniordev.gradleapp.forms.MotoForm;
 import com.juniordev.gradleapp.services.MotoService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -71,11 +76,30 @@ public class MotoController {
     return "list";
   }
 
+  /**
+   * 更新画面の初期表示
+   * @param motoNo バイク番号
+   * @param motoForm 入力内容
+   * @param model Model
+   * @return 遷移先
+   */
   @GetMapping("/list/{motoNo}")
-  public String initUpdate(Model model) {
+  public String initUpdate(@PathVariable("motoNo") Integer motoNo, @ModelAttribute MotoForm motoForm, Model model) {
     this.setBrands(model);
 
+    Motorcycle moto = motoService.getMotos(motoNo);
+
+    BeanUtils.copyProperties(moto, motoForm);
     return "moto";
+  }
+
+  @PostMapping("/list/save")
+  public String save(@ModelAttribute MotoForm motoForm) {
+    Motorcycle moto = new Motorcycle();
+    BeanUtils.copyProperties(motoForm, moto);
+    motoService.save(moto);
+
+    return "redirect:/list";
   }
 
   /**
