@@ -37,6 +37,7 @@
       , m.price 
       , m.comment 
       , m.brand_id 
+      , m.version
       , m.create_date_time 
       , m.update_date_time 
       , b.brand_name 

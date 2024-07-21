@@ -20,6 +20,8 @@ public class Motorcycle {
   private String comment;
   // ブランド
   private Brand brand;
+  // バージョン
+  private Integer version;
   // 作成日時
   private LocalDateTime createDateTime;
   // 更新日時
