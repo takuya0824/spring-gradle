@@ -5,6 +5,7 @@ moto_name varchar(100),
 price int,
 comment varchar(200),
 brand_id int,
+version int,
 create_date_time datetime,
 update_date_time datetime);
 

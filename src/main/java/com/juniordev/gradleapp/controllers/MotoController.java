@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -93,13 +95,22 @@ public class MotoController {
     return "moto";
   }
 
+  @SuppressWarnings("null")
   @PostMapping("/list/save")
-  public String save(@ModelAttribute MotoForm motoForm) {
-    Motorcycle moto = new Motorcycle();
-    BeanUtils.copyProperties(motoForm, moto);
-    motoService.save(moto);
-
-    return "redirect:/list";
+  public String save(@ModelAttribute MotoForm motoForm, BindingResult result) {
+    try {
+      log.info("motoForm:{}", motoForm);
+      Motorcycle moto = new Motorcycle();
+      BeanUtils.copyProperties(motoForm, moto);
+      int count = motoService.save(moto);
+      log.info("{}件更新", count);
+  
+      return "redirect:/list";
+    } catch (OptimisticLockingFailureException e) {
+      result.addError(new ObjectError("global", e.getMessage()));
+      return "moto";
+    }
+    
   }
 
   /**

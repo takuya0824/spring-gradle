@@ -32,6 +32,6 @@ public interface MotorcycleMapper {
    * @param before 更新前バイク情報
    * @return 更新件数
    */
-  @Update("update motorcycle set moto_no = #{motoNo}, moto_name = #{motoName}, price = #{price}, comment = #{comment}, brand_id = #{brand.brandId}, create_date_time = #{createDateTime}, update_date_time = #{updateDateTime} where moto_no = #{motoNo}")
+  @Update("update motorcycle set moto_no = #{motoNo}, moto_name = #{motoName}, price = #{price}, comment = #{comment}, brand_id = #{brand.brandId}, version = version + 1, create_date_time = #{createDateTime}, update_date_time = #{updateDateTime} where moto_no = #{motoNo} and version = #{version}")
   public int update(Motorcycle before);
 }

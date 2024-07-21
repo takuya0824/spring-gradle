@@ -16,4 +16,6 @@ public class MotoForm {
   private String comment;
   // ブランド
   private Brand brand;
+  // バージョン
+  private Integer version;
 }
