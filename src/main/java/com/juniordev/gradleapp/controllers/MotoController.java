@@ -108,6 +108,13 @@ public class MotoController {
     return "moto";
   }
 
+  /**
+   * バイク情報を保存する
+   * @param motoForm 入力内容
+   * @param result BindingResult
+   * @param model Model
+   * @return 遷移先
+   */
   @SuppressWarnings("null")
   @PostMapping("/list/save")
   public String save(@ModelAttribute MotoForm motoForm, BindingResult result, Model model) {
@@ -124,7 +131,6 @@ public class MotoController {
       result.addError(new ObjectError("global", e.getMessage()));
       return "moto";
     }
-    
   }
 
   /**
@@ -135,5 +141,30 @@ public class MotoController {
     // ブランドリスト取得
     List<Brand> brands = motoService.getBrands();
     model.addAttribute("brands", brands);
+  }
+
+  /**
+   * バイク情報を削除する
+   * @param motoForm 入力内容
+   * @param result BindingResult
+   * @param model Model
+   * @return 遷移先
+   */
+  @SuppressWarnings("null")
+  @PostMapping("/list/delete")
+  public String delete(@ModelAttribute MotoForm motoForm, BindingResult result, Model model) {
+    try {
+      log.info("motoForm:{}", motoForm);
+      Motorcycle moto = new Motorcycle();
+      BeanUtils.copyProperties(motoForm, moto);
+      int count = motoService.delete(moto);
+      log.info("{}件削除", count);
+  
+      return "redirect:/list";
+    } catch (OptimisticLockingFailureException e) {
+      this.setBrands(model);
+      result.addError(new ObjectError("global", e.getMessage()));
+      return "moto";
+    }
   }
 }

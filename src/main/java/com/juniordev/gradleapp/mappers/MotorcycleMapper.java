@@ -2,6 +2,7 @@ package com.juniordev.gradleapp.mappers;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
 
@@ -33,7 +34,15 @@ public interface MotorcycleMapper {
    * @return 更新件数
    */
   @Update("update motorcycle set moto_no = #{motoNo}, moto_name = #{motoName}, price = #{price}, comment = #{comment}, brand_id = #{brand.brandId}, version = version + 1, create_date_time = #{createDateTime}, update_date_time = #{updateDateTime} where moto_no = #{motoNo} and version = #{version}")
-  public int update(Motorcycle before);
+  public int update(Motorcycle moto);
+
+  /**
+   * バイク情報を削除する
+   * @param before 更新前バイク情報
+   * @return 削除件数
+   */
+  @Delete("delete from motorcycle where moto_no = #{motoNo} and version = #{version}")
+  public int delete(Motorcycle moto);
   
   /**
    * 新しいバイク番号を採番する

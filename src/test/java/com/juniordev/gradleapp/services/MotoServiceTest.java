@@ -210,4 +210,16 @@ public class MotoServiceTest {
     assertThat(after.getCreateDateTime().format(dtFormatter)).isEqualTo(LocalDateTime.now().format(dtFormatter));
     assertThat(after.getUpdateDateTime()).isNull();
   }
+
+  @DisplayName("バイク情報削除")
+  @Test
+  @Transactional
+  void test013() {
+    Motorcycle before = motoService.getMotos(1);
+
+    motoService.delete(before);
+
+    Motorcycle after = motoService.getMotos(1);
+    assertThat(after).isNull();
+  }
 }

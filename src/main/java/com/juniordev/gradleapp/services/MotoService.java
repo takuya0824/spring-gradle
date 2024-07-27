@@ -67,7 +67,7 @@ public class MotoService {
       throw new OptimisticLockingFailureException(messageSource.getMessage("error.OptimisticLockingFailure", null, Locale.JAPANESE));
     }
     if (count > 1) {
-      throw new RuntimeException(messageSource.getMessage("error.Runtime", null, Locale.JAPANESE));
+      throw new RuntimeException(messageSource.getMessage("error.Runtime", new String[] {"2件以上更新されました。"}, Locale.JAPANESE));
     }
     return count;
   }
@@ -87,6 +87,23 @@ public class MotoService {
     }
     if (count > 1) {
       throw new RuntimeException(messageSource.getMessage("error.Runtime", new String[] {"登録に失敗しました。"}, Locale.JAPANESE));
+    }
+    return count;
+  }
+
+  /**
+   * バイク情報を削除する。
+   * @param moto バイク情報
+   * @return 削除件数
+   */
+  @Transactional
+  public int delete(Motorcycle moto) {
+    int count =  motorcycleMapper.delete(moto);
+    if (count == 0) {
+      throw new OptimisticLockingFailureException(messageSource.getMessage("error.OptimisticLockingFailure", null, Locale.JAPANESE));
+    }
+    if (count > 1) {
+      throw new RuntimeException(messageSource.getMessage("error.Runtime", new String[] {"2件以上削除されました。"}, Locale.JAPANESE));
     }
     return count;
   }
