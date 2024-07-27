@@ -50,4 +50,32 @@
     order by
       m.moto_no
   </select>
+  <select id="selectNewMotoNo" resultType="Integer">
+    select
+      max(m.moto_no) + 1 
+    from
+      motorcycle m
+    for update
+  </select>
+  <insert id="insert" parameterType="com.juniordev.gradleapp.beans.Motorcycle">
+    insert
+    into motorcycle(
+      moto_no
+      , moto_name
+      , price
+      , comment
+      , brand_id
+      , version
+      , create_date_time
+    )
+    values(
+      #{motoNo}
+      , #{motoName}
+      , #{price}
+      , #{comment}
+      , #{brand.brandId}
+      , 1
+      , now()
+    )
+  </insert>
 </mapper>

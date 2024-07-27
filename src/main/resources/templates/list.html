@@ -40,7 +40,7 @@
         </div>
         <div class="row">
           <div class="col d-flex flex-row-reverse">
-            <button type="button" class="btn btn-primary" th:text="#{btn.new}"></button>
+            <a th:href="@{/list/new}" class="btn btn-primary" th:text="#{btn.new}"></a>
             <a th:href="@{/list/reset}" class="btn btn-secondary ms-1 me-1" th:text="#{btn.reset}"></a>
             <button type="submit" class="btn btn-success" th:text="#{btn.search}"></button>
           </div>

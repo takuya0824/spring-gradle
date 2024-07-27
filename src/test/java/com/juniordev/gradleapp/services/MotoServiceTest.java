@@ -1,10 +1,11 @@
 package com.juniordev.gradleapp.services;
 
+import static org.assertj.core.api.Assertions.*;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.juniordev.gradleapp.beans.Brand;
 import com.juniordev.gradleapp.beans.Motorcycle;
 import com.juniordev.gradleapp.beans.SearchForm;
 
@@ -183,5 +185,29 @@ public class MotoServiceTest {
 
     Motorcycle after = motoService.getMotos(1);
     assertThat(after.getMotoName()).isEqualTo("newname");
+  }
+
+  @DisplayName("バイク情報登録")
+  @Test
+  @Transactional
+  void test012() {
+    Motorcycle before = new Motorcycle();
+    before.setMotoName("newname");
+    before.setPrice(4000000);
+    before.setComment("comment");
+    before.setBrand(new Brand(1, "HONDA"));
+
+
+    motoService.save(before);
+
+    Motorcycle after = motoService.getMotos(5);
+    assertThat(after.getMotoNo()).isEqualTo(5);
+    assertThat(after.getMotoName()).isEqualTo("newname");
+    assertThat(after.getPrice()).isEqualTo(4000000);
+    assertThat(after.getComment()).isEqualTo("comment");
+    assertThat(after.getBrand().getBrandId()).isEqualTo(1);
+    assertThat(after.getVersion()).isEqualTo(1);
+    assertThat(after.getCreateDateTime().format(dtFormatter)).isEqualTo(LocalDateTime.now().format(dtFormatter));
+    assertThat(after.getUpdateDateTime()).isNull();
   }
 }

@@ -95,9 +95,22 @@ public class MotoController {
     return "moto";
   }
 
+  /**
+   * 登録画面の初期表示
+   * @param motoForm 入力内容
+   * @param model Model
+   * @return 遷移先
+   */
+  @GetMapping("/list/new")
+  public String initNew(@ModelAttribute MotoForm motoForm, Model model) {
+    this.setBrands(model);
+
+    return "moto";
+  }
+
   @SuppressWarnings("null")
   @PostMapping("/list/save")
-  public String save(@ModelAttribute MotoForm motoForm, BindingResult result) {
+  public String save(@ModelAttribute MotoForm motoForm, BindingResult result, Model model) {
     try {
       log.info("motoForm:{}", motoForm);
       Motorcycle moto = new Motorcycle();
@@ -107,6 +120,7 @@ public class MotoController {
   
       return "redirect:/list";
     } catch (OptimisticLockingFailureException e) {
+      this.setBrands(model);
       result.addError(new ObjectError("global", e.getMessage()));
       return "moto";
     }
