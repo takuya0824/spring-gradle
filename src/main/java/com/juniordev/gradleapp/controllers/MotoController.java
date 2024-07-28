@@ -123,9 +123,13 @@ public class MotoController {
    */
   @SuppressWarnings("null")
   @PostMapping("/list/save")
-  public String save(@ModelAttribute MotoForm motoForm, BindingResult result, Model model) {
+  public String save(@Validated MotoForm motoForm, BindingResult result, Model model) {
+    this.setBrands(model);
     try {
       log.info("motoForm:{}", motoForm);
+      if (result.hasErrors()) {
+        return "moto";
+      }
       Motorcycle moto = new Motorcycle();
       BeanUtils.copyProperties(motoForm, moto);
       int count = motoService.save(moto);
@@ -133,7 +137,6 @@ public class MotoController {
 
       return "redirect:/list";
     } catch (OptimisticLockingFailureException e) {
-      this.setBrands(model);
       result.addError(new ObjectError("global", e.getMessage()));
       return "moto";
     }
