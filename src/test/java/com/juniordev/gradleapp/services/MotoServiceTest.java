@@ -16,45 +16,45 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.juniordev.gradleapp.beans.Brand;
 import com.juniordev.gradleapp.beans.Motorcycle;
-import com.juniordev.gradleapp.beans.SearchForm;
+import com.juniordev.gradleapp.forms.SearchForm;
 
 @SpringBootTest
 public class MotoServiceTest {
 
   DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyy/MM/dd HH:mm");
-  
+
   @Autowired
   MotoService motoService;
 
   // @Test
   // void バイク情報を全件検索できる() {
-  //   SearchCondition condition = new SearchCondition();
-  //   List<Motorcycle> motos = motoService.getMotos(condition);
+  // SearchCondition condition = new SearchCondition();
+  // List<Motorcycle> motos = motoService.getMotos(condition);
 
-  //   assertThat(motos.size()).isEqualTo(4);
+  // assertThat(motos.size()).isEqualTo(4);
 
-  //   Motorcycle moto = motos.get(0);
-  //   assertThat(moto.getMotoNo()).isEqualTo(1);
-  //   assertThat(moto.getMotoName()).isEqualTo("GB350");
-  //   assertThat(moto.getPrice()).isEqualTo(3500000);
-  //   assertThat(moto.getComment()).isEqualTo("かっこいい");
-  //   assertThat(moto.getBrand().getBrandName()).isEqualTo("HONDA");
+  // Motorcycle moto = motos.get(0);
+  // assertThat(moto.getMotoNo()).isEqualTo(1);
+  // assertThat(moto.getMotoName()).isEqualTo("GB350");
+  // assertThat(moto.getPrice()).isEqualTo(3500000);
+  // assertThat(moto.getComment()).isEqualTo("かっこいい");
+  // assertThat(moto.getBrand().getBrandName()).isEqualTo("HONDA");
   // }
 
   // @Test
   // void ブランド情報を全件検索できる() {
-  //   List<Brand> brands = motoService.getBrands();
+  // List<Brand> brands = motoService.getBrands();
 
-  //   assertThat(brands.size()).isEqualTo(4);
+  // assertThat(brands.size()).isEqualTo(4);
 
-  //   Brand brand = brands.get(0);
-  //   assertThat(brand.getBrandId()).isEqualTo(1);
-  //   assertThat(brand.getBrandName()).isEqualTo("HONDA");
+  // Brand brand = brands.get(0);
+  // assertThat(brand.getBrandId()).isEqualTo(1);
+  // assertThat(brand.getBrandName()).isEqualTo("HONDA");
   // }
 
   @DisplayName("バイク一覧取得 条件：ブランドID")
   @ParameterizedTest
-  @CsvSource({"1, HONDA", "2, KAWASAKI", "3, SUZUKI", "4, NISSAN"})
+  @CsvSource({ "1, HONDA", "2, KAWASAKI", "3, SUZUKI", "4, NISSAN" })
   void test001(int brandId, String brandName) {
     SearchForm condition = new SearchForm();
     condition.setBrandId(brandId);
@@ -76,7 +76,7 @@ public class MotoServiceTest {
 
   @DisplayName("バイク一覧取得 条件：バイク名 完全一致")
   @ParameterizedTest
-  @CsvSource({"GB350", "FG230", "SG260"})
+  @CsvSource({ "GB350", "FG230", "SG260" })
   void test003(String motoName) {
     SearchForm condition = new SearchForm();
     condition.setKeyword(motoName);
@@ -89,7 +89,7 @@ public class MotoServiceTest {
 
   @DisplayName("バイク一覧取得 条件：バイク名 部分一致")
   @ParameterizedTest
-  @CsvSource({"GB, GB350", "230, FG230", "G26, SG260"})
+  @CsvSource({ "GB, GB350", "230, FG230", "G26, SG260" })
   void test004(String keyword, String motoName) {
     SearchForm condition = new SearchForm();
     condition.setKeyword(keyword);
@@ -113,7 +113,7 @@ public class MotoServiceTest {
 
   @DisplayName("バイク一覧取得 条件：ブランドID, バイク名")
   @ParameterizedTest
-  @CsvSource({"1, GB, GB350", "2, 230, FG230", "3, G2, SG260"})
+  @CsvSource({ "1, GB, GB350", "2, 230, FG230", "3, G2, SG260" })
   void test006(int brandId, String keyword, String motoName) {
     SearchForm condition = new SearchForm();
     condition.setBrandId(brandId);
@@ -129,7 +129,7 @@ public class MotoServiceTest {
 
   @DisplayName("バイク一覧取得 条件：ブランドID, バイク名 該当なし")
   @ParameterizedTest
-  @CsvSource({"1, GC350", "2, KG230", "3, SR260"})
+  @CsvSource({ "1, GC350", "2, KG230", "3, SR260" })
   void test007(int brandId, String keyword) {
     SearchForm condition = new SearchForm();
     condition.setBrandId(brandId);
@@ -152,7 +152,7 @@ public class MotoServiceTest {
 
   @DisplayName("バイク情報取得 条件：バイク番号")
   @ParameterizedTest
-  @CsvSource({"1, GB350", "2, FG230", "3, SG260"})
+  @CsvSource({ "1, GB350", "2, FG230", "3, SG260" })
   void test009(int motoNo, String motoName) {
     Motorcycle moto = motoService.getMotos(motoNo);
 
@@ -180,7 +180,6 @@ public class MotoServiceTest {
     Motorcycle before = motoService.getMotos(1);
     before.setMotoName("newname");
 
-
     motoService.save(before);
 
     Motorcycle after = motoService.getMotos(1);
@@ -196,7 +195,6 @@ public class MotoServiceTest {
     before.setPrice(4000000);
     before.setComment("comment");
     before.setBrand(new Brand(1, "HONDA"));
-
 
     motoService.save(before);
 
