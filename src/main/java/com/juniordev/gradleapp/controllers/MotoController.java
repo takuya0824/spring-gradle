@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.juniordev.gradleapp.beans.Brand;
 import com.juniordev.gradleapp.beans.Motorcycle;
-import com.juniordev.gradleapp.beans.SearchForm;
 import com.juniordev.gradleapp.forms.MotoForm;
+import com.juniordev.gradleapp.forms.SearchForm;
 import com.juniordev.gradleapp.services.MotoService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MotoController {
 
-  // private static final Logger log = LoggerFactory.getLogger(HelloController.class);
+  // private static final Logger log =
+  // LoggerFactory.getLogger(HelloController.class);
 
   @Autowired
   MotoService motoService;
@@ -42,14 +43,15 @@ public class MotoController {
 
   /**
    * バイク一覧を検索する
+   * 
    * @param searchForm 検索条件
-   * @param model model
+   * @param model      model
    * @return 遷移先
    */
   @GetMapping("/list")
   public String getList(@Validated SearchForm searchForm, BindingResult result, Model model) {
-    
-    if(result.hasErrors()) {
+
+    if (result.hasErrors()) {
       return "list";
     }
     this.setBrands(model);
@@ -66,8 +68,9 @@ public class MotoController {
 
   /**
    * 検索条件をクリアする
+   * 
    * @param searchForm 検索条件
-   * @param model model
+   * @param model      model
    * @return 遷移先
    */
   @GetMapping("/list/reset")
@@ -80,9 +83,10 @@ public class MotoController {
 
   /**
    * 更新画面の初期表示
-   * @param motoNo バイク番号
+   * 
+   * @param motoNo   バイク番号
    * @param motoForm 入力内容
-   * @param model Model
+   * @param model    Model
    * @return 遷移先
    */
   @GetMapping("/list/{motoNo}")
@@ -97,8 +101,9 @@ public class MotoController {
 
   /**
    * 登録画面の初期表示
+   * 
    * @param motoForm 入力内容
-   * @param model Model
+   * @param model    Model
    * @return 遷移先
    */
   @GetMapping("/list/new")
@@ -110,24 +115,28 @@ public class MotoController {
 
   /**
    * バイク情報を保存する
+   * 
    * @param motoForm 入力内容
-   * @param result BindingResult
-   * @param model Model
+   * @param result   BindingResult
+   * @param model    Model
    * @return 遷移先
    */
   @SuppressWarnings("null")
   @PostMapping("/list/save")
-  public String save(@ModelAttribute MotoForm motoForm, BindingResult result, Model model) {
+  public String save(@Validated MotoForm motoForm, BindingResult result, Model model) {
+    this.setBrands(model);
     try {
       log.info("motoForm:{}", motoForm);
+      if (result.hasErrors()) {
+        return "moto";
+      }
       Motorcycle moto = new Motorcycle();
       BeanUtils.copyProperties(motoForm, moto);
       int count = motoService.save(moto);
       log.info("{}件更新", count);
-  
+
       return "redirect:/list";
     } catch (OptimisticLockingFailureException e) {
-      this.setBrands(model);
       result.addError(new ObjectError("global", e.getMessage()));
       return "moto";
     }
@@ -135,6 +144,7 @@ public class MotoController {
 
   /**
    * ブランドリストをmodelにセットする
+   * 
    * @param model model
    */
   private void setBrands(Model model) {
@@ -145,9 +155,10 @@ public class MotoController {
 
   /**
    * バイク情報を削除する
+   * 
    * @param motoForm 入力内容
-   * @param result BindingResult
-   * @param model Model
+   * @param result   BindingResult
+   * @param model    Model
    * @return 遷移先
    */
   @SuppressWarnings("null")
@@ -159,7 +170,7 @@ public class MotoController {
       BeanUtils.copyProperties(motoForm, moto);
       int count = motoService.delete(moto);
       log.info("{}件削除", count);
-  
+
       return "redirect:/list";
     } catch (OptimisticLockingFailureException e) {
       this.setBrands(model);

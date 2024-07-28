@@ -1,4 +1,4 @@
-package com.juniordev.gradleapp.beans;
+package com.juniordev.gradleapp.forms;
 
 import javax.validation.constraints.Size;
 
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchForm {
-  
+
   private Integer brandId;
 
   @Size(min = 2, max = 10)
