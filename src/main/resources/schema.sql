@@ -13,3 +13,8 @@ DROP table if exists brand;
 CREATE table brand(
 brand_id int not null primary key,
 brand_name varchar(100));
+
+DROP table if exists user;
+CREATE table user(
+username varchar(20) not null primary key,
+password varchar(100));
